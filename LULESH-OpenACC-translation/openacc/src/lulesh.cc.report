@@ -1,0 +1,414 @@
+* Lines 302-303 contains the following statement
+#pragma acc parallel loop present(p[0:numElem], q[0:numElem], sigxx[0:numElem],sigyy[0:numElem],sigzz[0:numElem])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:p[0:numElem],q[0:numElem],sigxx[0:numElem],sigyy[0:numElem],sigzz[0:numElem])
+
+
+* Lines 503-513 contains the following statement
+#pragma acc parallel loop present(x[0:numNode], y[0:numNode], z[0:numNode], determ[0:numElem], nodelist[0:numElem8], sigxx[0:numElem], sigyy[0:numElem], sigzz[0:numElem], fx_elem[0:numElem8], fy_elem[0:numElem8], fz_elem[0:numElem8])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:x[0:numNode],y[0:numNode],z[0:numNode],determ[0:numElem],nodelist[0:numElem8],sigxx[0:numElem],sigyy[0:numElem],sigzz[0:numElem],fx_elem[0:numElem8],fy_elem[0:numElem8],fz_elem[0:numElem8])
+
+
+* Lines 603-613 contains the following statement
+#pragma acc kernels loop independent vector(256) present(fx_elem[0:numElem8], fy_elem[0:numElem8], fz_elem[0:numElem8], nodelist[0:numElem8],fx[0:numElem], fy[0:numElem], fz[0:numElem], nodeElemCount[0:numNode], nodeElemCornerList[0:nCorner], nodeElemStart[0:numNode])
+that has been as been translated into:
+#pragma omp target teams loop order(concurrent) map(alloc:fx_elem[0:numElem8],fy_elem[0:numElem8],fz_elem[0:numElem8],nodelist[0:numElem8],fx[0:numElem],fy[0:numElem],fz[0:numElem],nodeElemCount[0:numNode],nodeElemCornerList[0:nCorner],nodeElemStart[0:numNode]) defaultmap(tofrom:scalar)
+* WARNING(s)! Please review the translation.
+  1. The kernels construct in OpenACC is a hint to the compiler of where it should look for parallelism. OpenMP does not have a direct translation for this construct.
+
+
+* Lines 1164-1180 contains the following statement
+#pragma acc kernels copyin(gamma[4][8]) present(fx_elem[0:numElem8], fy_elem[0:numElem8], fz_elem[0:numElem8], xd[0:numNode], yd[0:numNode], zd[0:numNode], dvdx[0:numElem8], dvdy[0:numElem8], dvdz[0:numElem8], x8n[0:numElem8], y8n[0:numElem8], z8n[0:numElem8], nodelist[0:numElem8],determ[0:numElem], ss[0:numElem], elemMass[0:numElem])
+that has been as been translated into:
+#pragma omp target map(to:gamma[4][8]) map(alloc:fx_elem[0:numElem8],fy_elem[0:numElem8],fz_elem[0:numElem8],xd[0:numNode],yd[0:numNode],zd[0:numNode],dvdx[0:numElem8],dvdy[0:numElem8],dvdz[0:numElem8],x8n[0:numElem8],y8n[0:numElem8],z8n[0:numElem8],nodelist[0:numElem8],determ[0:numElem],ss[0:numElem],elemMass[0:numElem]) defaultmap(tofrom:scalar)
+* WARNING(s)! Please review the translation.
+  1. The kernels construct in OpenACC is a hint to the compiler of where it should look for parallelism. OpenMP does not have a direct translation for this construct.
+
+
+* Line 1181 contains the following statement
+#pragma acc cache(gamma)
+that has been as been translated into:
+Nothing.
+* WARNING(s)! Please review the translation.
+  1. There is no translation from ACC CACHE into OpenMP. The ACC CACHE is ignored.
+
+
+* Line 1182 contains the following statement
+#pragma acc loop independent
+that has been as been translated into:
+#pragma omp loop order(concurrent)
+
+
+* Lines 1286-1295 contains the following statement
+#pragma acc kernels loop independent vector(256) present(nodeElemCount[0:numNode], nodeElemStart[0:numNode], nodeElemCornerList[0:nCorner], fx_elem[0:numElem8], fy_elem[0:numElem8], fz_elem[0:numElem8], fx[0:numNode], fy[0:numNode], fz[0:numNode])
+that has been as been translated into:
+#pragma omp target teams loop order(concurrent) map(alloc:nodeElemCount[0:numNode],nodeElemStart[0:numNode],nodeElemCornerList[0:nCorner],fx_elem[0:numElem8],fy_elem[0:numElem8],fz_elem[0:numElem8],fx[0:numNode],fy[0:numNode],fz[0:numNode]) defaultmap(tofrom:scalar)
+* WARNING(s)! Please review the translation.
+  1. The kernels construct in OpenACC is a hint to the compiler of where it should look for parallelism. OpenMP does not have a direct translation for this construct.
+
+
+* Lines 1407-1420 contains the following statement
+#pragma acc parallel loop present(dvdx[0:numElem8], dvdy[0:numElem8], dvdz[0:numElem8], x8n[0:numElem8], y8n[0:numElem8], z8n[0:numElem8], x[0:numNode], y[0:numNode], z[0:numNode], volo[0:numElem], v[0:numElem], determ[0:numElem], nodelist[0:numElem8]) private(abort)
+that has been as been translated into:
+#pragma omp target teams loop private(abort) map(alloc:dvdx[0:numElem8],dvdy[0:numElem8],dvdz[0:numElem8],x8n[0:numElem8],y8n[0:numElem8],z8n[0:numElem8],x[0:numNode],y[0:numNode],z[0:numNode],volo[0:numElem],v[0:numElem],determ[0:numElem],nodelist[0:numElem8])
+
+
+* Lines 1508-1509 contains the following statement
+#pragma acc parallel loop present(determ[0:numElem]) private(abort)
+that has been as been translated into:
+#pragma omp target teams loop private(abort) map(alloc:determ[0:numElem])
+
+
+* Lines 1547-1549 contains the following statement
+#pragma acc parallel loop present(fx[0:numNode], fy[0:numNode], fz[0:numNode])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:fx[0:numNode],fy[0:numNode],fz[0:numNode])
+
+
+* Lines 1562-1564 contains the following statement
+#pragma acc data present(fx[0:numNode], fy[0:numNode], fz[0:numNode])
+that has been as been translated into:
+#pragma omp target data map(alloc:fx[0:numNode],fy[0:numNode],fz[0:numNode])
+
+
+* Lines 1566-1568 contains the following statement
+#pragma acc update host(fx[0:numNode], fy[0:numNode], fz[0:numNode])
+that has been as been translated into:
+#pragma omp target update from(fx[0:numNode],fy[0:numNode],fz[0:numNode])
+
+
+* Lines 1577-1580 contains the following statement
+#pragma acc update device(fx[0:numNode], fy[0:numNode], fz[0:numNode]) async
+that has been as been translated into:
+#pragma omp target update to(fx[0:numNode],fy[0:numNode],fz[0:numNode]) nowait
+* WARNING(s)! Please review the translation.
+  1. OpenACC and OpenMP differ on asynchronous mechanisms. Check for the translation.
+
+
+* Lines 1593-1599 contains the following statement
+#pragma acc parallel loop present(fx[0:numNode], fy[0:numNode], fz[0:numNode], xdd[0:numNode], ydd[0:numNode], zdd[0:numNode], nodalMass[0:numNode])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:fx[0:numNode],fy[0:numNode],fz[0:numNode],xdd[0:numNode],ydd[0:numNode],zdd[0:numNode],nodalMass[0:numNode])
+
+
+* Lines 1626-1632 contains the following statement
+#pragma acc parallel firstprivate(numNodeBC) present(xdd[0:numNode], ydd[0:numNode], zdd[0:numNode], symmX[0:numNodeBC], symmY[0:numNodeBC], symmZ[0:numNodeBC])
+that has been as been translated into:
+#pragma omp target teams map(alloc:xdd[0:numNode],ydd[0:numNode],zdd[0:numNode],symmX[0:numNodeBC],symmY[0:numNodeBC],symmZ[0:numNodeBC]) firstprivate(numNodeBC)
+
+
+* Line 1636 contains the following statement
+#pragma acc loop
+that has been as been translated into:
+#pragma omp loop
+
+
+* Line 1642 contains the following statement
+#pragma acc loop
+that has been as been translated into:
+#pragma omp loop
+
+
+* Line 1648 contains the following statement
+#pragma acc loop
+that has been as been translated into:
+#pragma omp loop
+
+
+* Lines 1666-1671 contains the following statement
+#pragma acc parallel loop present(xd[0:numNode], yd[0:numNode], zd[0:numNode], xdd[0:numNode], ydd[0:numNode], zdd[0:numNode])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:xd[0:numNode],yd[0:numNode],zd[0:numNode],xdd[0:numNode],ydd[0:numNode],zdd[0:numNode])
+
+
+* Lines 1698-1703 contains the following statement
+#pragma acc parallel loop present(x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode])
+
+
+* Lines 1757-1762 contains the following statement
+#pragma acc data present(x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode])
+that has been as been translated into:
+#pragma omp target data map(alloc:x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode])
+
+
+* Line 1768 contains the following statement
+#pragma acc wait
+that has been as been translated into:
+#pragma omp taskwait
+* WARNING(s)! Please review the translation.
+  1. Different semantics on depend/wait constructs.
+
+
+* Lines 1783-1786 contains the following statement
+#pragma acc update host(xd[0:numNode], yd[0:numNode], zd[0:numNode]) async(up)
+that has been as been translated into:
+#pragma omp target update from(xd[0:numNode],yd[0:numNode],zd[0:numNode]) nowait
+* WARNING(s)! Please review the translation.
+  1. OpenACC and OpenMP differ on asynchronous mechanisms. Check for the translation.
+
+
+* Lines 1796-1799 contains the following statement
+#pragma acc update host(x[0:numNode], y[0:numNode], z[0:numNode]) async(up)
+that has been as been translated into:
+#pragma omp target update from(x[0:numNode],y[0:numNode],z[0:numNode]) nowait
+* WARNING(s)! Please review the translation.
+  1. OpenACC and OpenMP differ on asynchronous mechanisms. Check for the translation.
+
+
+* Line 1800 contains the following statement
+#pragma acc wait(up)
+that has been as been translated into:
+#pragma omp taskwait
+* WARNING(s)! Please review the translation.
+  1. Different semantics on depend/wait constructs.
+
+
+* Lines 1814-1820 contains the following statement
+#pragma acc update device(x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode]) async
+that has been as been translated into:
+#pragma omp target update to(x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode]) nowait
+* WARNING(s)! Please review the translation.
+  1. OpenACC and OpenMP differ on asynchronous mechanisms. Check for the translation.
+
+
+* Lines 2159-2173 contains the following statement
+#pragma acc parallel loop present(dxx[0:numElem], dyy[0:numElem], dzz[0:numElem], x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode], v[0:numElem], volo[0:numElem], vnew[0:numElem], delv[0:numElem], arealg[0:numElem], nodelist[0:numElem8])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:dxx[0:numElem],dyy[0:numElem],dzz[0:numElem],x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode],v[0:numElem],volo[0:numElem],vnew[0:numElem],delv[0:numElem],arealg[0:numElem],nodelist[0:numElem8])
+
+
+* Lines 2353-2358 contains the following statement
+#pragma acc parallel loop present(vdov[0:numElem], dxx[0:numElem], dyy[0:numElem], dzz[0:numElem], vnew[0:numElem]) private(abort)
+that has been as been translated into:
+#pragma omp target teams loop private(abort) map(alloc:vdov[0:numElem],dxx[0:numElem],dyy[0:numElem],dzz[0:numElem],vnew[0:numElem])
+
+
+* Lines 2413-2427 contains the following statement
+#pragma acc parallel loop present(vnew[0:numElem], nodelist[0:numElem8], x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode], volo[0:numElem], delx_xi[0:allElem], delx_eta[0:allElem], delx_zeta[0:allElem], delv_xi[0:allElem], delv_eta[0:allElem], delv_zeta[0:allElem])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:vnew[0:numElem],nodelist[0:numElem8],x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode],volo[0:numElem],delx_xi[0:allElem],delx_eta[0:allElem],delx_zeta[0:allElem],delv_xi[0:allElem],delv_eta[0:allElem],delv_zeta[0:allElem])
+
+
+* Lines 2612-2634 contains the following statement
+#pragma acc parallel loop firstprivate(qlc_monoq, qqc_monoq, monoq_limiter_mult, monoq_max_slope, ptiny) copyin(regElemlist[0:regElemSize]) present(vnew[0:numElem], vdov[0:numElem], delx_xi[0:allElem], delx_eta[0:allElem], delx_zeta[0:allElem], delv_xi[0:allElem], delv_eta[0:allElem], delv_zeta[0:allElem], elemMass[0:numElem], volo[0:numElem], lxip[0:numElem], lxim[0:numElem], letam[0:numElem], letap[0:numElem], lzetam[0:numElem], lzetap[0:numElem], ql[0:numElem], qq[0:numElem], elemBC[0:numElem])
+that has been as been translated into:
+#pragma omp target teams loop map(to:regElemlist[0:regElemSize]) map(alloc:vnew[0:numElem],vdov[0:numElem],delx_xi[0:allElem],delx_eta[0:allElem],delx_zeta[0:allElem],delv_xi[0:allElem],delv_eta[0:allElem],delv_zeta[0:allElem],elemMass[0:numElem],volo[0:numElem],lxip[0:numElem],lxim[0:numElem],letam[0:numElem],letap[0:numElem],lzetam[0:numElem],lzetap[0:numElem],ql[0:numElem],qq[0:numElem],elemBC[0:numElem]) firstprivate(qlc_monoq,qqc_monoq,monoq_limiter_mult,monoq_max_slope,ptiny)
+
+
+* Lines 2833-2835 contains the following statement
+#pragma acc data present(delv_xi[allElem], delv_eta[allElem], delv_zeta[allElem])
+that has been as been translated into:
+#pragma omp target data map(alloc:delv_xi[allElem],delv_eta[allElem],delv_zeta[allElem])
+
+
+* Lines 2837-2839 contains the following statement
+#pragma acc update host(delv_xi[allElem], delv_eta[allElem], delv_zeta[allElem])
+that has been as been translated into:
+#pragma omp target update from(delv_xi[allElem],delv_eta[allElem],delv_zeta[allElem])
+
+
+* Lines 2894-2900 contains the following statement
+#pragma acc parallel loop present(regElemList[0:length], compression[0:length], pbvc[0:length], p_new[0:length], bvc[0:length], e_old[0:length], vnewc[0:numElem])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:regElemList[0:length],compression[0:length],pbvc[0:length],p_new[0:length],bvc[0:length],e_old[0:length],vnewc[0:numElem])
+
+
+* Line 2939 contains the following statement
+#pragma acc data create(pHalfStep[0:length])
+that has been as been translated into:
+#pragma omp target data map(alloc:pHalfStep[0:length])
+
+
+* Lines 2942-2947 contains the following statement
+#pragma acc parallel loop present(e_new[0:length], e_old[0:length], p_old[0:length], q_old[0:length], delvc[0:length], work[0:length])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:e_new[0:length],e_old[0:length],p_old[0:length],q_old[0:length],delvc[0:length],work[0:length])
+
+
+* Lines 2960-2970 contains the following statement
+#pragma acc parallel loop present(compHalfStep[0:length], pHalfStep[0:length], delvc[0:length], p_old[0:length], q_old[0:length], ql_old[0:length], qq_old[0:length], q_new[0:length], pbvc[0:length], bvc[0:length], e_new[0:length])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:compHalfStep[0:length],pHalfStep[0:length],delvc[0:length],p_old[0:length],q_old[0:length],ql_old[0:length],qq_old[0:length],q_new[0:length],pbvc[0:length],bvc[0:length],e_new[0:length])
+
+
+* Lines 2996-2997 contains the following statement
+#pragma acc parallel loop present(e_new[0:length], work[0:length])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:e_new[0:length],work[0:length])
+
+
+* Lines 3013-3025 contains the following statement
+#pragma acc parallel loop present(regElemList[0:length], pHalfStep[0:length], delvc[0:length], pbvc[0:length], e_new[0:length], bvc[0:length], ql_old[0:length], qq_old[0:length], p_old[0:length], q_old[0:length], p_new[0:length], q_new[0:length], vnewc[0:numElem])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:regElemList[0:length],pHalfStep[0:length],delvc[0:length],pbvc[0:length],e_new[0:length],bvc[0:length],ql_old[0:length],qq_old[0:length],p_old[0:length],q_old[0:length],p_new[0:length],q_new[0:length],vnewc[0:numElem])
+
+
+* Lines 3062-3071 contains the following statement
+#pragma acc parallel loop present(regElemList[0:length], delvc[0:length], pbvc[0:length], e_new[0:length], vnewc[0:numElem], bvc[0:length], ql_old[0:length], qq_old[0:length], p_new[0:length], q_new[0:length])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:regElemList[0:length],delvc[0:length],pbvc[0:length],e_new[0:length],vnewc[0:numElem],bvc[0:length],ql_old[0:length],qq_old[0:length],p_new[0:length],q_new[0:length])
+
+
+* Lines 3108-3115 contains the following statement
+#pragma acc parallel loop present(vnewc[0:numElem], regElemList[0:len], pbvc[0:len], enewc[0:len], bvc[0:len], pnewc[0:len], ss[0:numElem]) firstprivate(rho0, ss4o3)
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:vnewc[0:numElem],regElemList[0:len],pbvc[0:len],enewc[0:len],bvc[0:len],pnewc[0:len],ss[0:numElem]) firstprivate(rho0,ss4o3)
+
+
+* Lines 3170-3184 contains the following statement
+#pragma acc data present(e_old[0:numElemReg], delvc[0:numElemReg], p_old[0:numElemReg], q_old[0:numElemReg], compression[0:numElemReg], compHalfStep[0:numElemReg], qq_old[0:numElemReg], ql_old[0:numElemReg], work[0:numElemReg], p_new[0:numElemReg], e_new[0:numElemReg], q_new[0:numElemReg], bvc[0:numElemReg], pbvc[0:numElemReg]) copyin(regElemList[0:numElemReg])
+that has been as been translated into:
+#pragma omp target data map(to:regElemList[0:numElemReg]) map(alloc:e_old[0:numElemReg],delvc[0:numElemReg],p_old[0:numElemReg],q_old[0:numElemReg],compression[0:numElemReg],compHalfStep[0:numElemReg],qq_old[0:numElemReg],ql_old[0:numElemReg],work[0:numElemReg],p_new[0:numElemReg],e_new[0:numElemReg],q_new[0:numElemReg],bvc[0:numElemReg],pbvc[0:numElemReg])
+
+
+* Lines 3191-3205 contains the following statement
+#pragma acc parallel loop present(e_old[0:numElemReg], delvc[0:numElemReg], p_old[0:numElemReg], q_old[0:numElemReg], compression[0:numElemReg], compHalfStep[0:numElemReg], regElemList[0:numElemReg], qq_old[0:numElemReg], ql_old[0:numElemReg], p[0:numElem], e[0:numElem], q[0:numElem], delv[0:numElem], qq[0:numElem], ql[0:numElem])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:e_old[0:numElemReg],delvc[0:numElemReg],p_old[0:numElemReg],q_old[0:numElemReg],compression[0:numElemReg],compHalfStep[0:numElemReg],regElemList[0:numElemReg],qq_old[0:numElemReg],ql_old[0:numElemReg],p[0:numElem],e[0:numElem],q[0:numElem],delv[0:numElem],qq[0:numElem],ql[0:numElem])
+
+
+* Lines 3216-3220 contains the following statement
+#pragma acc parallel loop present(vnewc[0:numElem], compression[0:numElemReg], delvc[0:numElemReg], compHalfStep[0:numElemReg], regElemList[0:numElemReg])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:vnewc[0:numElem],compression[0:numElemReg],delvc[0:numElemReg],compHalfStep[0:numElemReg],regElemList[0:numElemReg])
+
+
+* Lines 3231-3237 contains the following statement
+#pragma acc parallel loop present(vnewc[0:numElem], compHalfStep[0:numElemReg], compression[0:numElemReg], regElemList[0:numElemReg], p_old[0:numElemReg], compHalfStep[0:numElemReg], work[0:numElemReg])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:vnewc[0:numElem],compHalfStep[0:numElemReg],compression[0:numElemReg],regElemList[0:numElemReg],p_old[0:numElemReg],compHalfStep[0:numElemReg],work[0:numElemReg])
+* WARNING(s)! Please review the translation.
+  1. Potential mapping overlap between map(alloc:compHalfStep) and map(alloc:compHalfStep). Try to unify to avoid potential data mapping issues, for instance map(alloc:compHalfStep).
+
+
+* Lines 3260-3265 contains the following statement
+#pragma acc parallel loop present(p_new[0:numElemReg], e_new[0:numElemReg], q_new[0:numElemReg], p[0:numElem], e[0:numElem], q[0:numElem])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:p_new[0:numElemReg],e_new[0:numElemReg],q_new[0:numElemReg],p[0:numElem],e[0:numElem],q[0:numElem])
+
+
+* Line 3294 contains the following statement
+#pragma acc data present(vnew[0:numElem])
+that has been as been translated into:
+#pragma omp target data map(alloc:vnew[0:numElem])
+
+
+* Line 3299 contains the following statement
+#pragma acc parallel loop
+that has been as been translated into:
+#pragma omp target teams loop
+
+
+* Line 3308 contains the following statement
+#pragma acc parallel loop
+that has been as been translated into:
+#pragma omp target teams loop
+
+
+* Lines 3321-3322 contains the following statement
+#pragma acc parallel loop private(vc) present(v[0:numElem])
+that has been as been translated into:
+#pragma omp target teams loop private(vc) map(alloc:v[0:numElem])
+
+
+* Lines 3372-3373 contains the following statement
+#pragma acc parallel loop present(vnew[0:length], v[0:length])
+that has been as been translated into:
+#pragma omp target teams loop map(alloc:vnew[0:length],v[0:length])
+
+
+* Line 3564 contains the following statement
+#pragma acc wait
+that has been as been translated into:
+#pragma omp taskwait
+* WARNING(s)! Please review the translation.
+  1. Different semantics on depend/wait constructs.
+
+
+* Line 3600 contains the following statement
+#pragma acc wait
+that has been as been translated into:
+#pragma omp taskwait
+* WARNING(s)! Please review the translation.
+  1. Different semantics on depend/wait constructs.
+
+
+* Lines 3607-3612 contains the following statement
+#pragma acc data present(x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode])
+that has been as been translated into:
+#pragma omp target data map(alloc:x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode])
+
+
+* Line 3618 contains the following statement
+#pragma acc wait
+that has been as been translated into:
+#pragma omp taskwait
+* WARNING(s)! Please review the translation.
+  1. Different semantics on depend/wait constructs.
+
+
+* Lines 3625-3631 contains the following statement
+#pragma acc update host(x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode]) async(up)
+that has been as been translated into:
+#pragma omp target update from(x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode]) nowait
+* WARNING(s)! Please review the translation.
+  1. OpenACC and OpenMP differ on asynchronous mechanisms. Check for the translation.
+
+
+* Lines 3644-3646 contains the following statement
+#pragma acc data present(ss[0:numElem], vdov[0:numElem], arealg[0:numElem])
+that has been as been translated into:
+#pragma omp target data map(alloc:ss[0:numElem],vdov[0:numElem],arealg[0:numElem])
+
+
+* Lines 3648-3651 contains the following statement
+#pragma acc update host(ss[0:numElem], vdov[0:numElem], arealg[0:numElem]) async
+that has been as been translated into:
+#pragma omp target update from(ss[0:numElem],vdov[0:numElem],arealg[0:numElem]) nowait
+* WARNING(s)! Please review the translation.
+  1. OpenACC and OpenMP differ on asynchronous mechanisms. Check for the translation.
+
+
+* Line 3659 contains the following statement
+#pragma acc wait(up)
+that has been as been translated into:
+#pragma omp taskwait
+* WARNING(s)! Please review the translation.
+  1. Different semantics on depend/wait constructs.
+
+
+* Lines 3683-3689 contains the following statement
+#pragma acc update device(x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode]) async
+that has been as been translated into:
+#pragma omp target update to(x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode]) nowait
+* WARNING(s)! Please review the translation.
+  1. OpenACC and OpenMP differ on asynchronous mechanisms. Check for the translation.
+
+
+* Lines 3936-3951 contains the following statement
+#pragma acc enter data create( fx[0:numNode], fy[0:numNode], fz[0:numNode], fx_elem[0:numElem8], fy_elem[0:numElem8], fz_elem[0:numElem8], dvdx[0:numElem8], dvdy[0:numElem8], dvdz[0:numElem8], x8n[0:numElem8], y8n[0:numElem8], z8n[0:numElem8], sigxx[0:numElem], sigyy[0:numElem], sigzz[0:numElem], determ[0:numElem], dxx[0:numElem], dyy[0:numElem], dzz[0:numElem], vnew[0:numElem], delx_xi[0:allElem], delx_eta[0:allElem], delx_zeta[0:allElem], delv_xi[0:allElem], delv_eta[0:allElem], delv_zeta[0:allElem], e_old[0:maxRegSize], delvc[0:maxRegSize], p_old[0:maxRegSize], q_old[0:maxRegSize], compression[0:maxRegSize], compHalfStep[0:maxRegSize], qq_old[0:maxRegSize], ql_old[0:maxRegSize], work[0:maxRegSize], p_new[0:maxRegSize], e_new[0:maxRegSize], q_new[0:maxRegSize], bvc[0:maxRegSize], pbvc[0:maxRegSize] )
+that has been as been translated into:
+#pragma omp target enter data map(alloc:fx[0:numNode],fy[0:numNode],fz[0:numNode],fx_elem[0:numElem8],fy_elem[0:numElem8],fz_elem[0:numElem8],dvdx[0:numElem8],dvdy[0:numElem8],dvdz[0:numElem8],x8n[0:numElem8],y8n[0:numElem8],z8n[0:numElem8],sigxx[0:numElem],sigyy[0:numElem],sigzz[0:numElem],determ[0:numElem],dxx[0:numElem],dyy[0:numElem],dzz[0:numElem],vnew[0:numElem],delx_xi[0:allElem],delx_eta[0:allElem],delx_zeta[0:allElem],delv_xi[0:allElem],delv_eta[0:allElem],delv_zeta[0:allElem],e_old[0:maxRegSize],delvc[0:maxRegSize],p_old[0:maxRegSize],q_old[0:maxRegSize],compression[0:maxRegSize],compHalfStep[0:maxRegSize],qq_old[0:maxRegSize],ql_old[0:maxRegSize],work[0:maxRegSize],p_new[0:maxRegSize],e_new[0:maxRegSize],q_new[0:maxRegSize],bvc[0:maxRegSize],pbvc[0:maxRegSize])
+
+
+* Lines 3954-3957 contains the following statement
+#pragma acc enter data copyin( x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode], p[0:numElem], e[0:numElem] )
+that has been as been translated into:
+#pragma omp target enter data map(to:x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode],p[0:numElem],e[0:numElem])
+
+
+* Lines 3960-3971 contains the following statement
+#pragma acc enter data copyin( symmX[0:numNodeBC], symmY[0:numNodeBC], symmZ[0:numNodeBC], xdd[0:numNode], ydd[0:numNode], zdd[0:numNode], v[0:numElem], volo[0:numElem], delv[0:numElem], arealg[0:numElem], vdov[0:numElem], ss[0:numElem], q[0:numElem], qq[0:numElem], ql[0:numElem], nodalMass[0:numNode], elemMass[0:numElem], lxim[0:numElem], lxip[0:numElem], letam[0:numElem], letap[0:numElem], lzetam[0:numElem], lzetap[0:numElem], nodelist[0:numElem8], nodeElemCount[0:numNode], nodeElemStart[0:numNode], nodeElemCornerList[0:nCorner], elemBC[0:numElem] )
+that has been as been translated into:
+#pragma omp target enter data map(to:symmX[0:numNodeBC],symmY[0:numNodeBC],symmZ[0:numNodeBC],xdd[0:numNode],ydd[0:numNode],zdd[0:numNode],v[0:numElem],volo[0:numElem],delv[0:numElem],arealg[0:numElem],vdov[0:numElem],ss[0:numElem],q[0:numElem],qq[0:numElem],ql[0:numElem],nodalMass[0:numNode],elemMass[0:numElem],lxim[0:numElem],lxip[0:numElem],letam[0:numElem],letap[0:numElem],lzetam[0:numElem],lzetap[0:numElem],nodelist[0:numElem8],nodeElemCount[0:numNode],nodeElemStart[0:numNode],nodeElemCornerList[0:nCorner],elemBC[0:numElem])
+
+
+* Lines 3992-4021 contains the following statement
+#pragma acc exit data delete( fx[0:numNode], fy[0:numNode], fz[0:numNode], fx_elem[0:numElem8], fy_elem[0:numElem8], fz_elem[0:numElem8], dvdx[0:numElem8], dvdy[0:numElem8], dvdz[0:numElem8], x8n[0:numElem8], y8n[0:numElem8], z8n[0:numElem8], sigxx[0:numElem], sigyy[0:numElem], sigzz[0:numElem], determ[0:numElem], dxx[0:numElem], dyy[0:numElem], dzz[0:numElem], vnew[0:numElem], delx_xi[0:allElem], delx_eta[0:allElem], delx_zeta[0:allElem], delv_xi[0:allElem], delv_eta[0:allElem], delv_zeta[0:allElem], e_old[0:maxRegSize], delvc[0:maxRegSize], p_old[0:maxRegSize], q_old[0:maxRegSize], compression[0:maxRegSize], compHalfStep[0:maxRegSize], qq_old[0:maxRegSize], ql_old[0:maxRegSize], work[0:maxRegSize], p_new[0:maxRegSize], e_new[0:maxRegSize], q_new[0:maxRegSize], bvc[0:maxRegSize], pbvc[0:maxRegSize], x[0:numNode], y[0:numNode], z[0:numNode], xd[0:numNode], yd[0:numNode], zd[0:numNode], p[0:numElem], e[0:numElem], symmX[0:numNodeBC], symmY[0:numNodeBC], symmZ[0:numNodeBC], xdd[0:numNode], ydd[0:numNode], zdd[0:numNode], v[0:numElem], volo[0:numElem], delv[0:numElem], arealg[0:numElem], vdov[0:numElem], ss[0:numElem], q[0:numElem], qq[0:numElem], ql[0:numElem], nodalMass[0:numNode], elemMass[0:numElem], lxim[0:numElem], lxip[0:numElem], letam[0:numElem], letap[0:numElem], lzetam[0:numElem], lzetap[0:numElem], nodelist[0:numElem8], nodeElemCount[0:numNode], nodeElemStart[0:numNode], nodeElemCornerList[0:nCorner], elemBC[0:numElem] )
+that has been as been translated into:
+#pragma omp target exit data map(delete:fx[0:numNode],fy[0:numNode],fz[0:numNode],fx_elem[0:numElem8],fy_elem[0:numElem8],fz_elem[0:numElem8],dvdx[0:numElem8],dvdy[0:numElem8],dvdz[0:numElem8],x8n[0:numElem8],y8n[0:numElem8],z8n[0:numElem8],sigxx[0:numElem],sigyy[0:numElem],sigzz[0:numElem],determ[0:numElem],dxx[0:numElem],dyy[0:numElem],dzz[0:numElem],vnew[0:numElem],delx_xi[0:allElem],delx_eta[0:allElem],delx_zeta[0:allElem],delv_xi[0:allElem],delv_eta[0:allElem],delv_zeta[0:allElem],e_old[0:maxRegSize],delvc[0:maxRegSize],p_old[0:maxRegSize],q_old[0:maxRegSize],compression[0:maxRegSize],compHalfStep[0:maxRegSize],qq_old[0:maxRegSize],ql_old[0:maxRegSize],work[0:maxRegSize],p_new[0:maxRegSize],e_new[0:maxRegSize],q_new[0:maxRegSize],bvc[0:maxRegSize],pbvc[0:maxRegSize],x[0:numNode],y[0:numNode],z[0:numNode],xd[0:numNode],yd[0:numNode],zd[0:numNode],p[0:numElem],e[0:numElem],symmX[0:numNodeBC],symmY[0:numNodeBC],symmZ[0:numNodeBC],xdd[0:numNode],ydd[0:numNode],zdd[0:numNode],v[0:numElem],volo[0:numElem],delv[0:numElem],arealg[0:numElem],vdov[0:numElem],ss[0:numElem],q[0:numElem],qq[0:numElem],ql[0:numElem],nodalMass[0:numNode],elemMass[0:numElem],lxim[0:numElem],lxip[0:numElem],letam[0:numElem],letap[0:numElem],lzetam[0:numElem],lzetap[0:numElem],nodelist[0:numElem8],nodeElemCount[0:numNode],nodeElemStart[0:numNode],nodeElemCornerList[0:nCorner],elemBC[0:numElem])
+
+
